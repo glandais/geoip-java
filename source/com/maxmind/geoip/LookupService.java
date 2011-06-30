@@ -694,7 +694,7 @@ public class LookupService {
             while (record_buf[record_buf_offset + str_length] != '\0')
                 str_length++;
             if (str_length > 0) {
-                record.city = new String(record_buf, record_buf_offset, str_length);
+                record.city = new String(record_buf, record_buf_offset, str_length, "ISO-8859-1");
             }
             record_buf_offset += str_length + 1;
             str_length = 0;
@@ -781,7 +781,7 @@ public class LookupService {
             while (buf[str_length] != '\0') {
 		str_length++;
             }
-            org_buf = new String(buf,0,str_length);
+            org_buf = new String(buf, 0, str_length, "ISO-8859-1");
             return org_buf;
         }
         catch (IOException e) {
