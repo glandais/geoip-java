@@ -112,7 +112,7 @@ public class LookupService {
     private final static int MAX_RECORD_LENGTH = 4;
 
     private final static int MAX_ORG_RECORD_LENGTH = 300;
-    private final static int FULL_RECORD_LENGTH = 50;
+    private final static int FULL_RECORD_LENGTH = 60;
 
     private static final Country UNKNOWN_COUNTRY = new Country("--", "N/A");
 
@@ -134,9 +134,9 @@ public class LookupService {
 	"PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY",
 	"QA","RE","RO","RU","RW","SA","SB","SC","SD","SE","SG","SH","SI","SJ",
 	"SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","TC","TD","TF","TG",
-	"TH","TJ","TK","TM","TN","TO","TP","TR","TT","TV","TW","TZ","UA","UG",
+	"TH","TJ","TK","TM","TN","TO","TL","TR","TT","TV","TW","TZ","UA","UG",
 	"UM","US","UY","UZ","VA","VC","VE","VG","VI","VN","VU","WF","WS","YE",
-	"YT","YU","ZA","ZM","ZR","ZW","A1","A2","O1"};
+	"YT","CS","ZA","ZM","ZR","ZW","A1","A2","O1"};
 
     private final static String[] countryName = {
 	"N/A","Asia/Pacific Region","Europe","Andorra","United Arab Emirates",
@@ -174,19 +174,19 @@ public class LookupService {
 	"Netherlands","Norway","Nepal","Nauru","Niue","New Zealand","Oman","Panama",
 	"Peru","French Polynesia","Papua New Guinea","Philippines","Pakistan",
 	"Poland","Saint Pierre and Miquelon","Pitcairn Islands","Puerto Rico","" +
-	"Palestinian Territory, Occupied","Portugal","Palau","Paraguay","Qatar",
+	"Palestinian Territory","Portugal","Palau","Paraguay","Qatar",
 	"Reunion","Romania","Russian Federation","Rwanda","Saudi Arabia",
 	"Solomon Islands","Seychelles","Sudan","Sweden","Singapore","Saint Helena",
 	"Slovenia","Svalbard and Jan Mayen","Slovakia","Sierra Leone","San Marino",
 	"Senegal","Somalia","Suriname","Sao Tome and Principe","El Salvador",
 	"Syrian Arab Republic","Swaziland","Turks and Caicos Islands","Chad",
 	"French Southern Territories","Togo","Thailand","Tajikistan","Tokelau",
-	"Turkmenistan","Tunisia","Tonga","East Timor","Turkey","Trinidad and Tobago",
+	"Turkmenistan","Tunisia","Tonga","Timor-Leste","Turkey","Trinidad and Tobago",
 	"Tuvalu","Taiwan","Tanzania, United Republic of","Ukraine","Uganda",
 	"United States Minor Outlying Islands","United States","Uruguay","Uzbekistan",
 	"Holy See (Vatican City State)","Saint Vincent and the Grenadines",
 	"Venezuela","Virgin Islands, British","Virgin Islands, U.S.","Vietnam",
-	"Vanuatu","Wallis and Futuna","Samoa","Yemen","Mayotte","Yugoslavia",
+	"Vanuatu","Wallis and Futuna","Samoa","Yemen","Mayotte","Serbia and Montenegro",
 	"South Africa","Zambia","Zaire","Zimbabwe","Anonymous Proxy",
 	"Satellite Provider","Other"};
 
@@ -286,12 +286,12 @@ public class LookupService {
         byte [] delim = new byte[3];
         byte [] buf = new byte[SEGMENT_RECORD_LENGTH];
 
-	for (i = 0; i < 233;i++){
-	    hashmapcountryCodetoindex.put(countryCode[i],new Integer(i));
-	    hashmapcountryNametoindex.put(countryName[i],new Integer(i));
-	}
 	if (file == null) {
 	    // distributed service only
+	    for (i = 0; i < 233;i++){
+		hashmapcountryCodetoindex.put(countryCode[i],new Integer(i));
+		hashmapcountryNametoindex.put(countryName[i],new Integer(i));
+	    }
 	    return;
 	}
 	file.seek(file.length() - 3);
