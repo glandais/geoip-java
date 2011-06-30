@@ -71,6 +71,7 @@ public class LookupService {
      * Database file.
      */
     private RandomAccessFile file = null;
+    private File databaseFile = null;
 
     /**
      * Information about the database.
@@ -89,6 +90,8 @@ public class LookupService {
     int dnsService = 0;
     int dboptions;
     byte dbbuffer[];
+    byte index_cache[];
+    long mtime;
     private final static int US_OFFSET = 1;
     private final static int CANADA_OFFSET = 677;
     private final static int WORLD_OFFSET = 1353;
@@ -100,6 +103,8 @@ public class LookupService {
     private final static int DATABASE_INFO_MAX_SIZE = 100;
     public final static int GEOIP_STANDARD = 0;
     public final static int GEOIP_MEMORY_CACHE = 1;
+    public final static int GEOIP_CHECK_CACHE = 2;
+    public final static int GEOIP_INDEX_CACHE = 4;
     public final static int GEOIP_UNKNOWN_SPEED = 0;
     public final static int GEOIP_DIALUP_SPEED = 1;
     public final static int GEOIP_CABLEDSL_SPEED = 2;
@@ -136,7 +141,7 @@ public class LookupService {
 	"SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","TC","TD","TF","TG",
 	"TH","TJ","TK","TM","TN","TO","TL","TR","TT","TV","TW","TZ","UA","UG",
 	"UM","US","UY","UZ","VA","VC","VE","VG","VI","VN","VU","WF","WS","YE",
-	"YT","CS","ZA","ZM","ZR","ZW","A1","A2","O1"};
+	"YT","RS","ZA","ZM","ME","ZW","A1","A2","O1","AX","GG","IM","JE"};
 
     private final static String[] countryName = {
 	"N/A","Asia/Pacific Region","Europe","Andorra","United Arab Emirates",
@@ -186,9 +191,9 @@ public class LookupService {
 	"United States Minor Outlying Islands","United States","Uruguay","Uzbekistan",
 	"Holy See (Vatican City State)","Saint Vincent and the Grenadines",
 	"Venezuela","Virgin Islands, British","Virgin Islands, U.S.","Vietnam",
-	"Vanuatu","Wallis and Futuna","Samoa","Yemen","Mayotte","Serbia and Montenegro",
-	"South Africa","Zambia","Zaire","Zimbabwe","Anonymous Proxy",
-	"Satellite Provider","Other"};
+	"Vanuatu","Wallis and Futuna","Samoa","Yemen","Mayotte","Serbia",
+	"South Africa","Zambia","Montenegro","Zimbabwe","Anonymous Proxy",
+	"Satellite Provider","Other","Aland Islands","Guernsey","Isle of Man","Jersey"};
 
 
     /**
@@ -243,6 +248,7 @@ public class LookupService {
      *      from the database file.
      */
     public LookupService(File databaseFile) throws IOException {
+        this.databaseFile = databaseFile;
         this.file = new RandomAccessFile(databaseFile, "r");
         init();
     }
@@ -272,6 +278,7 @@ public class LookupService {
      *      from the database file.
      */
     public LookupService(File databaseFile, int options) throws IOException{
+        this.databaseFile = databaseFile;
 	this.file = new RandomAccessFile(databaseFile, "r");
 	dboptions = options;
 	init();
@@ -293,6 +300,9 @@ public class LookupService {
 		hashmapcountryNametoindex.put(countryName[i],new Integer(i));
 	    }
 	    return;
+	}
+	if ((dboptions & GEOIP_CHECK_CACHE) != 0) {
+            mtime = databaseFile.lastModified();
 	}
 	file.seek(file.length() - 3);
         for (i = 0; i < STRUCTURE_INFO_MAX_SIZE; i++) {
@@ -338,7 +348,7 @@ public class LookupService {
                 file.seek(file.getFilePointer() - 4);
             }
         }
-        if ((databaseType == DatabaseInfo.COUNTRY_EDITION) | 
+        if ((databaseType == DatabaseInfo.COUNTRY_EDITION) |
 	    (databaseType == DatabaseInfo.PROXY_EDITION) |
 	    (databaseType == DatabaseInfo.NETSPEED_EDITION)) {
             databaseSegments = new int[1];
@@ -349,16 +359,30 @@ public class LookupService {
 	    int l = (int) file.length();
 	    dbbuffer = new byte[l];
 	    file.seek(0);
-	    file.read(dbbuffer,0,l);     
+	    file.read(dbbuffer,0,l);
+	    databaseInfo = this.getDatabaseInfo();
+	    file.close();
 	}
-    }
+        if ((dboptions & GEOIP_INDEX_CACHE) != 0) {
+          int l = databaseSegments[0] * recordLength * 2;
+          index_cache = new byte[l];
+          if (index_cache != null){
+            file.seek(0);
+            file.read(index_cache,0,l);     
+          }          
+        } else {
+          index_cache = null;
+        }
+     }
 
     /**
      * Closes the lookup service.
      */
     public void close() {
 	try {
-            file.close();
+	    if (file != null){
+		file.close();
+	    }
             file = null;
         }
         catch (Exception e) { }
@@ -398,7 +422,7 @@ public class LookupService {
      * @return the country the IP address is from.
      */
     public Country getCountry(long ipAddress) {
-        if (file == null) {
+        if (file == null && (dboptions & GEOIP_MEMORY_CACHE) == 0) {
             throw new IllegalStateException("Database has been closed.");
         }
         int ret = seekCountry(ipAddress) - COUNTRY_BEGIN;
@@ -426,7 +450,7 @@ public class LookupService {
     }
 
     public int getID(long ipAddress) {
-        if (file == null) {
+        if (file == null && (dboptions & GEOIP_MEMORY_CACHE) == 0) {
             throw new IllegalStateException("Database has been closed.");
         }
 	int ret = seekCountry(ipAddress) - databaseSegments[0];
@@ -445,6 +469,7 @@ public class LookupService {
         try {
             // Synchronize since we're accessing the database file.
             synchronized (this) {
+            _check_mtime();
                 boolean hasStructureInfo = false;
                 byte [] delim = new byte[3];
                 // Advance to part of file where database info is stored.
@@ -481,6 +506,23 @@ public class LookupService {
             e.printStackTrace();
         }
         return new DatabaseInfo("");
+    }
+
+    synchronized void _check_mtime(){
+      try {
+        if ((dboptions & GEOIP_CHECK_CACHE) != 0){
+          long t = databaseFile.lastModified();
+          if (t != mtime){
+            /* GeoIP Database file updated */
+            /* refresh filehandle */
+            file.close();
+            file = new RandomAccessFile(databaseFile,"r");
+	    init();
+          }
+        }
+      } catch (IOException e) {
+        System.out.println("file not found");
+      }
     }
 
     // for GeoIP City only
@@ -800,12 +842,18 @@ public class LookupService {
 	byte [] buf = new byte[2 * MAX_RECORD_LENGTH];
 	int [] x = new int[2];
         int offset = 0;
+        _check_mtime();
         for (int depth = 31; depth >= 0; depth--) {
             if ((dboptions & GEOIP_MEMORY_CACHE) == 1) {
 		//read from memory
                 for (int i = 0;i < 2 * MAX_RECORD_LENGTH;i++) {
 		    buf[i] = dbbuffer[(2 * recordLength * offset)+i];
 		}
+            } else if ((dboptions & GEOIP_INDEX_CACHE) != 0) {
+                //read from index cache
+                for (int i = 0;i < 2 * MAX_RECORD_LENGTH;i++) {
+		    buf[i] = index_cache[(2 * recordLength * offset)+i];
+		}            
             } else {
 		//read from disk 
 		try {
