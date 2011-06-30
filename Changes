@@ -1,4 +1,13 @@
+1.1.6  September 9th 2004
+        - Fixed problem with postalCode, city and region fields 
+	  returning null char (Frank Mather) 
+	- Added support for GeoIP Netspeed Database (Frank Mather)
+	- Added support for GEOIP_MEMORY_CACHE (Frank Mather)
+
+1.1.5  June 3rd 2004
 	- Added support for Maxmind GeoIP Region (Frank Mather)
+	- Windows compatibility fix for CountryLookupTest.java (Hanan Al-Shargi)
+	- Country name fixes
 
 1.1.4  October 21st 2003
 	- Added support for distributed queries (Frank Mather)

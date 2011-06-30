@@ -1,21 +1,48 @@
+To get started, run
+
+cd source/com/maxmind/geoip/
+javac *.java
+cd -
+CLASSPATH=".:source" javac *.java
+CLASSPATH=".:source" java CountryLookupTest
+
 IMPORTANT API Change for 1.1.x users - as of GeoIP 1.1.0 the
 lookupCountryXxxx methods return null if a country can not
 be found (it used to return '--' or 'N/A'.  Be sure to check the
 return value for null !
 
-This is version 1.1.4 of the Java interface to GeoIP.  For more information
+This is version 1.1.6 of the Java interface to GeoIP.  For more information
 see http://www.maxmind.com/
+
+As of version 1.1.4 this API is fully thread safe.
 
 To get started for GeoIP Country, look at the code in CountryLookupTest.java.
 
-CityLookupTest.java contains an example for the GeoIP City database.
+CityLookupTest.java contains an example for the MaxMind GeoIP City database.
 OrgLookupTest.java contains examples for the GeoIP Organization and ISP databases.
+RegionLookupTest.java contains an example for the MaxMind GeoIP Region database.
+NetspeedLookupTest.java contains an example for the MaxMind GeoIP Netspeed database.
 
 Note that CountryLookupTest assumes that you have the GeoIP Country database
 installed at /usr/local/share/GeoIP/GeoIP.dat
 
-The GeoIP Standard Country database is available from
+The GeoIP Free Country database is available from
 
 http://maxmind.com/download/geoip/database/
 
+MaxMind GeoIP Country offers greater accuracy over the free database.
+MaxMind GeoIP Country, Region, City, ISP, and Organization are available
+for purchase from here:
+http://www.maxmind.com/app/products
+
 Please send any comments to support@maxmind.com
+
+To generate the JAR file, cd to the source directory and run
+
+jar cf maxmindgeoip.jar com/maxmind/geoip/Country.class com/maxmind/geoip/DatabaseInfo.class com/maxmind/geoip/Location.class com/maxmind/geoip/LookupService.class com/maxmind/geoip/Region.class
+
+Windows Notes 
+========================
+If it doesn't work on Windows, try to emove or comment all the " package com.maxmind.geoip" lines from all the 
+files.
+
