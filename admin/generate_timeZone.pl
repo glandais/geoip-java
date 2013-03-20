@@ -13,7 +13,7 @@ my $had_region;
 open(FILE,"timezone.txt");
 my $str = <FILE>;
 
-print "package com.maxmind.geoip;\n";
+print "package net.ihe.gazelle.geoip;\n";
 print "// generated automatically from admin/generate_timeZone.pl\n";
 print "public class timeZone {\n";
 print "  static public String timeZoneByCountryAndRegion(String country,String region) {\n";

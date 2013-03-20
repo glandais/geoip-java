@@ -7,7 +7,7 @@ use strict;
 use warnings;
 
 print <<__JAVA_CODE__;
-package com.maxmind.geoip;
+package net.ihe.gazelle.geoip;
 // generated automatically from admin/generate_regionName.pl
 public class regionName {
 static public String regionNameByCode(String country_code,String region_code) {
@@ -35,7 +35,7 @@ static public String regionNameByCode(String country_code,String region_code) {
 __JAVA_CODE__
 
 # iso3166_2.txt extracted from http://www.maxmind.com/app/iso3166_2
-open( FILE, "iso3166_2.txt" ) or die $!;
+open( FILE, "region.csv" ) or die $!;
 <FILE>;
 my $last_country_code = "";
 while ( my $str = <FILE> ) {

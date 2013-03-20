@@ -18,7 +18,7 @@ my @time_zones = map { [ split /\t/, $_, 3 ] } <FILE>;
 #exit;
 my $cnt_time_zones = @time_zones;
 print <<__HEADER__;
-package com.maxmind.geoip;
+package net.ihe.gazelle.geoip;
 
 import java.util.HashMap;
 import java.util.TimeZone;
