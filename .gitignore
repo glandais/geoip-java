@@ -1,2 +1,7 @@
 
 target
+.classpath
+.project
+.settings/
+GeoIP.dat.gz
+GeoLiteCity.dat.gz
