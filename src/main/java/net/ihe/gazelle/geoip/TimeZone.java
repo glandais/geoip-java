@@ -1,7 +1,10 @@
 package net.ihe.gazelle.geoip;
 
 // generated automatically from admin/generate_timeZone.pl
-class TimeZone {
+public class TimeZone {
+	private TimeZone() {
+		super();
+	}
 	static public String timeZoneByCountryAndRegion(String country, String region) {
 		String timezone = null;
 		if (country == null) {

@@ -35,7 +35,7 @@ import java.text.ParseException;
  * <li>ISP edition -- ISP information.
  * </ul>
  * 
- * @see net.ihe.gazelle.geoip.LookupService#getDatabaseInfo()
+ * @see net.ihe.gazelle.geoip.GeoIP#getDatabaseInfo()
  * @author Matt Tucker
  */
 class DatabaseInfo {

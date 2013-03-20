@@ -1,8 +1,13 @@
 package net.ihe.gazelle.geoip;
 
 // generated automatically from admin/generate_regionName.pl
-class RegionName {
-	static public String regionNameByCode(String country_code, String region_code) {
+public class RegionName {
+	
+	private RegionName() {
+		super();
+	}
+	
+	public static String regionNameByCode(String country_code, String region_code) {
 		String name = null;
 		int region_code2 = -1;
 		if (region_code == null) {

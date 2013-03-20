@@ -6,7 +6,7 @@ class BenchmarkGeoIP {
 		int i4 = 0;
 		long t1 = System.currentTimeMillis();
 		for (int i2 = 0; i2 < numlookups; i2++) {
-			LookupService.getCountry_(ipstring[i4]);
+			GeoIP.getCountry_(ipstring[i4]);
 			i4 = (i4 + 1) % ipstring.length;
 		}
 		long t2 = System.currentTimeMillis();
@@ -19,7 +19,7 @@ class BenchmarkGeoIP {
 		int i4 = 0;
 		long t1 = System.currentTimeMillis();
 		for (int i2 = 0; i2 < numlookups; i2++) {
-			LookupService.getLocation_(ipstring[i4]);
+			GeoIP.getLocation_(ipstring[i4]);
 			i4 = (i4 + 1) % ipstring.length;
 		}
 		long t2 = System.currentTimeMillis();
@@ -33,14 +33,14 @@ class BenchmarkGeoIP {
 	public static void main(String args[]) {
 		// GEOIP_CHECK_CACHE is not yet supported, so that is why the lines below are commented out!
 
-		testGeoipCountry(LookupService.GEOIP_STANDARD, "GeoIP Country", 3000);
-		// testGeoipCountry(LookupService.GEOIP_CHECK_CACHE,"GeoIP Country with GEOIP_CHECK_CACHE",1000);
-//		testGeoipCountry(LookupService.GEOIP_MEMORY_CACHE, "GeoIP Country with GEOIP_MEMORY_CACHE", 30000);
-		// testGeoipCountry(LookupService.GEOIP_MEMORY_CACHE | LookupService.GEOIP_CHECK_CACHE,"GeoIP Country with GEOIP_MEMORY_CACHE",10000);
+		testGeoipCountry(GeoIP.GEOIP_STANDARD, "GeoIP Country", 3000);
+		// testGeoipCountry(GeoIP.GEOIP_CHECK_CACHE,"GeoIP Country with GEOIP_CHECK_CACHE",1000);
+//		testGeoipCountry(GeoIP.GEOIP_MEMORY_CACHE, "GeoIP Country with GEOIP_MEMORY_CACHE", 30000);
+		// testGeoipCountry(GeoIP.GEOIP_MEMORY_CACHE | GeoIP.GEOIP_CHECK_CACHE,"GeoIP Country with GEOIP_MEMORY_CACHE",10000);
 
-		testGeoipCity(LookupService.GEOIP_STANDARD, "GeoIP City", 1500);
-		// testGeoipCity(LookupService.GEOIP_INDEX_CACHE,"GeoIP City with GEOIP_INDEX_CACHE",2000);
-		// testGeoipCity(LookupService.GEOIP_INDEX_CACHE | LookupService.GEOIP_CHECK_CACHE,"GeoIP City with GEOIP_INDEX_CACHE and GEOIP_CHECK_CACHE",2000);
-//		testGeoipCity(LookupService.GEOIP_MEMORY_CACHE, "GeoIP City with GEOIP_MEMORY_CACHE", 15000);
+		testGeoipCity(GeoIP.GEOIP_STANDARD, "GeoIP City", 1500);
+		// testGeoipCity(GeoIP.GEOIP_INDEX_CACHE,"GeoIP City with GEOIP_INDEX_CACHE",2000);
+		// testGeoipCity(GeoIP.GEOIP_INDEX_CACHE | GeoIP.GEOIP_CHECK_CACHE,"GeoIP City with GEOIP_INDEX_CACHE and GEOIP_CHECK_CACHE",2000);
+//		testGeoipCity(GeoIP.GEOIP_MEMORY_CACHE, "GeoIP City with GEOIP_MEMORY_CACHE", 15000);
 	}
 }
