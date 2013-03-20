@@ -32,28 +32,28 @@
 				<executions>
 					<execution>
 						<id>download-geoip</id>
-						<!-- <phase>deploy</phase> -->
-						<phase>generate-resources</phase>
+<!-- 						<phase>deploy</phase> -->
+<!-- 						<phase>generate-resources</phase> -->
 						<goals>
 							<goal>download-single</goal>
 						</goals>
 						<configuration>
 							<url>http://geolite.maxmind.com</url>
 							<fromFile>download/geoip/database/GeoLiteCountry/GeoIP.dat.gz</fromFile>
-							<toDir>${project.build.directory}/</toDir>
+							<toDir>${project.build.directory}/maxmind/</toDir>
 						</configuration>
 					</execution>
 					<execution>
 						<id>download-geocity</id>
-						<!-- <phase>deploy</phase> -->
-						<phase>generate-resources</phase>
+<!-- 						<phase>deploy</phase> -->
+<!-- 						<phase>generate-resources</phase> -->
 						<goals>
 							<goal>download-single</goal>
 						</goals>
 						<configuration>
 							<url>http://geolite.maxmind.com</url>
 							<fromFile>download/geoip/database/GeoLiteCity.dat.gz</fromFile>
-							<toDir>${project.build.directory}/</toDir>
+							<toDir>${project.build.directory}/maxmind/</toDir>
 						</configuration>
 					</execution>
 				</executions>
