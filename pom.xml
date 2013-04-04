@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.ihe.gazelle.geoip</groupId>
 	<artifactId>gazelle-geoip</artifactId>
-	<version>1.1</version>
+	<version>1.2</version>
 	<packaging>jar</packaging>
 	<scm>
 		<connection>scm:git:git://github.com/glandais/geoip-java.git</connection>
@@ -32,8 +32,8 @@
 				<executions>
 					<execution>
 						<id>download-geoip</id>
-<!-- 						<phase>deploy</phase> -->
-<!-- 						<phase>generate-resources</phase> -->
+						<!-- <phase>deploy</phase> -->
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>download-single</goal>
 						</goals>
@@ -45,8 +45,8 @@
 					</execution>
 					<execution>
 						<id>download-geocity</id>
-<!-- 						<phase>deploy</phase> -->
-<!-- 						<phase>generate-resources</phase> -->
+						<!-- <phase>deploy</phase> -->
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>download-single</goal>
 						</goals>
