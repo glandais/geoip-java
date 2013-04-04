@@ -1,4 +1,11 @@
+Maven build with index downloading.
 
+Building a jar with all included.
+
+Usage as simple as :
+ Country country = GeoIP.getCountry_("74.125.138.94");
+or
+ Location location = GeoIP.getLocation_("74.125.138.94");
 
 ----------------
 -- OLD README --
